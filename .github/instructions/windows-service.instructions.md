@@ -9,7 +9,7 @@ Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. T
 - Serilog (stesso setup degli altri progetti)
 - Entity Framework Core 10: chiedere prima di aggiungere il pacchetto
 - Aggiungi sempre il file appsettings.local.json, aggiungi la chiamata in Program.cs, e ignora il file in .gitignore
-- **Dati sensibili** (credenziali, connection strings, API key, password): valori fake/placeholder in `appsettings.json` (committato), valori reali in `appsettings.local.json` (non committato). Non mettere mai dati reali in `appsettings.json`.
+- Dati sensibili: segui sempre `sensitive-data.instructions.md`
 
 ## Vietato
 - `Thread.Sleep` → usare `await Task.Delay`
