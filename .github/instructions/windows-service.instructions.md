@@ -1,3 +1,7 @@
+---
+applyTo: "**"
+---
+
 # Windows Service Design Rules (AI Agent)
 
 Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. Testo ottimizzato per token.
@@ -165,4 +169,4 @@ public class SyncOrdersOptions
 - [ ] `appsettings.local.json` aggiunto e ignorato in `.gitignore`
 - [ ] `appsettings.json` contiene solo valori fake/placeholder per dati sensibili, mai credenziali reali
 
-*Template v1.0 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-03-11
+*Template v1.1 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-03-17 21:28
