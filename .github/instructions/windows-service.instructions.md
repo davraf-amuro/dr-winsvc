@@ -169,4 +169,13 @@ public class SyncOrdersOptions
 - [ ] `appsettings.local.json` aggiunto e ignorato in `.gitignore`
 - [ ] `appsettings.json` contiene solo valori fake/placeholder per dati sensibili, mai credenziali reali
 
-*Template v1.1 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-03-17 21:28
+## 🎯 Criteri di successo (verificare prima di iniziare)
+
+Prima di iniziare, chiediti:
+- [ ] So esattamente quali worker creerò/modificherò?
+- [ ] Ho letto le istruzioni modulari pertinenti al task?
+- [ ] Ho verificato che il worker non esista già in `Workers/`?
+
+Se una risposta è NO → chiedi chiarimenti all'utente prima di procedere.
+
+*Template v1.2 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-03-25 — claude-sonnet-4-6
