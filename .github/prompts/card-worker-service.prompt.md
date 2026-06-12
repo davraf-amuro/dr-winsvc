@@ -34,6 +34,7 @@ Opera in background con [N] worker autonomi e ciclici: `[Worker1]`, `[Worker2]`,
 - **Pattern Architetturale:** BackgroundService + IServiceScopeFactory + Typed HttpClient
 - **Versione Corrente:**
 - **Owner/Team:**
+- **Referente:** [nome referente]
 - **Contatto Supporto:** dev-support@unidata.it
 
 ## Stack Tecnologico
@@ -78,6 +79,8 @@ Ogni worker estende `[BaseClass]` e opera in loop periodico con intervallo confi
 ## Configurazione e Hosting
 - **Entrypoint:** `src/<progetto>/Program.cs`
 - **Deploy:** Windows Service (`sc create` / `sc start`)
+- **Ambiente Test:** [percorso fisico | nome server | servizio Windows su ... | non pubblicato]
+- **Ambiente Produzione:** [percorso fisico | nome server | servizio Windows su ... | non pubblicato]
 - **Logging:** [struttura file log per worker, rolling giornaliero]
 
 ## Configurazione Worker
@@ -98,6 +101,7 @@ Ogni worker ha una sezione dedicata in `appsettings.json` sotto `Workers`:
 - Non inventare dati; campi senza info restano vuoti
 - Tabelle senza dati: lascia solo header
 - Info sensibili: indica solo il nome variabile, mai il valore
+- `Referente`, `Ambiente Test` e `Ambiente Produzione` non possono essere vuoti: se l'utente non fornisce il dato, usa `non pubblicato`
 - Ciclo di elaborazione: ricava dai commenti e dalla logica di `DoWorkAsync` / `ExecuteAsync`
 - Se non esiste sezione `BatchSize` nelle Options, rimuovi la riga dalla tabella
 - Risposta del prompt: indica solo la card generata, non riepilogare i dati
@@ -110,5 +114,8 @@ Ogni worker ha una sezione dedicata in `appsettings.json` sotto `Workers`:
 - [ ] Tabella Configurazione Worker con i campi effettivi delle Options
 - [ ] Nessun segreto esposto
 - [ ] Footer con data e LLM presente
+- [ ] Referente compilato
+- [ ] Ambiente Test compilato (o `non pubblicato`)
+- [ ] Ambiente Produzione compilato (o `non pubblicato`)
 
-*Template v1.0 - .NET 10 Worker Service - Token-optimized for AI agents* - Last Update 2026-06-04 — claude-sonnet-4-6
+*Template v1.1 - .NET 10 Worker Service - Token-optimized for AI agents* - Last Update 2026-06-12 — claude-sonnet-4-6
