@@ -31,7 +31,7 @@ Opera in background con [N] worker autonomi e ciclici: `[Worker1]`, `[Worker2]`,
 - **Workspace:** [NomeWorkspace.code-workspace]
 - **Repository:** [URL senza branch]
 - **Tipo Applicazione:** Windows Service (.NET Worker Service)
-- **Pattern Architetturale:** BackgroundService + IServiceScopeFactory + Typed HttpClient
+- **Pattern Architetturale:** [ricavato dal codice, es. BackgroundService + IServiceScopeFactory + Typed HttpClient]
 - **Versione Corrente:**
 - **Owner/Team:**
 - **Referente:** [nome referente]
@@ -103,7 +103,8 @@ Ogni worker ha una sezione dedicata in `appsettings.json` sotto `Workers`:
 - Info sensibili: indica solo il nome variabile, mai il valore
 - `Referente`, `Ambiente Test` e `Ambiente Produzione` non possono essere vuoti: se l'utente non fornisce il dato, usa `non pubblicato`
 - Ciclo di elaborazione: ricava dai commenti e dalla logica di `DoWorkAsync` / `ExecuteAsync`
-- Se non esiste sezione `BatchSize` nelle Options, rimuovi la riga dalla tabella
+- Tabella Configurazione Worker: solo i campi presenti nelle Options. `IntervalSeconds` è obbligatorio (`windows-service.instructions.md`, regola 11); se non esistono `Enabled` o `BatchSize`, rimuovi le loro righe
+- Pattern Architetturale: elenca solo i componenti trovati nel codice, non quelli dell'esempio
 - Risposta del prompt: indica solo la card generata, non riepilogare i dati
 
 ## ✅ Checklist Post-Generazione
@@ -118,4 +119,4 @@ Ogni worker ha una sezione dedicata in `appsettings.json` sotto `Workers`:
 - [ ] Ambiente Test compilato (o `non pubblicato`)
 - [ ] Ambiente Produzione compilato (o `non pubblicato`)
 
-*Template v1.1 - .NET 10 Worker Service - Token-optimized for AI agents* - Last Update 2026-06-12 — claude-sonnet-4-6
+*Template v1.2 - .NET 10 Worker Service - Token-optimized for AI agents* - Last Update 2026-10-11 — claude-opus-5-5 — pattern e campi Options ricavati dal codice, allineati a windows-service.instructions.md (davraf-amuro/dr-winsvc#1)
