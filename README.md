@@ -24,14 +24,14 @@ Punti chiave di `windows-service.instructions.md`:
 
 ## 🔗 Dipendenze e domini
 
-- Dipende da: `dr-dotnet-backend` (installato in automatico se manca dal manifest: comportamento dell'installer, non ancora provato sul campo).
+- Dipende da: `dr-dotnet-backend` (installato in automatico se manca dal manifest: comportamento dell'installer, non ancora provato sul campo), più il core `dr-guidelines`, dipendenza implicita di ogni pacchetto.
 - Richiesto da: nessun pacchetto.
 - Dominio del catalogo: nessun dominio lo elenca direttamente; il dominio `dotnet-backend` elenca solo `dr-dotnet-backend`. `appliesTo`: `dotnet`.
 - Tipologia che lo suggerisce: `worker-service` — Windows Service / Worker (.NET 10), insieme a `dr-dotnet-backend`; `dr-efdb` è opzionale. Template `dotnet new worker`, guida di scaffolding `docs/scaffolding-windows-service.md` nel core.
 - `-Update` non si propaga alle dipendenze: aggiornare solo questo pacchetto lascia `dr-dotnet-backend` com'è. `/dr-get-latest` aggiorna anche la dipendenza, che ha una propria voce nel manifest.
 - La skill `/dr-audit-api` di `dr-dotnet-backend` usa questa istruzione nella fase di conformità quando trova `Workers/*.cs`.
 
-File di altri pacchetti citati dall'istruzione. Non vengono installati in automatico:
+File di altri pacchetti citati dall'istruzione. Il core `dr-guidelines` si installa da solo se manca dal manifest:
 
 | File citato | Pacchetto che lo porta |
 |-------------|------------------------|
@@ -41,7 +41,7 @@ File di altri pacchetti citati dall'istruzione. Non vengono installati in automa
 
 Di solito non serve installarlo a mano. Per una soluzione nuova segui la guida del core [Creare una soluzione da zero](https://github.com/davraf-amuro/dr-guidelines/blob/main/docs/guida-nuova-soluzione.md): `/dr-scaffold` installa da solo i pacchetti giusti. Il flusso completo non è ancora stato provato sul campo.
 
-A mano. Conviene installare prima il core `dr-guidelines`, che porta `CLAUDE.md`, configurazione e skill; l'installer però non lo impone. Prerequisiti: PowerShell 7, git, `gh auth status` autenticato (l'installer si scarica con `gh api`; i repo sono Public dal 2026-09-21). L'installer clona il repo da `github.com` con `git clone --depth 1`: con i repo Public non servono credenziali; su un repo Private anche git deve poterlo leggere (`gh auth setup-git`).
+A mano. Il core `dr-guidelines` porta `CLAUDE.md`, configurazione e skill: se manca dal manifest, l'installer lo installa per primo, con entrambe le forme qui sotto. Prerequisiti: PowerShell 7, git, `gh auth status` autenticato (l'installer si scarica con `gh api`; i repo sono Public dal 2026-09-21). L'installer clona il repo da `github.com` con `git clone --depth 1`: con i repo Public non servono credenziali; su un repo Private anche git deve poterlo leggere (`gh auth setup-git`).
 
 Lancia i comandi dalla **root del repository host**: l'installer usa la cartella corrente come destinazione e non avvisa se sbagli cartella.
 
@@ -107,4 +107,4 @@ Dal progetto host usa `/dr-segnala-miglioria <descrizione>` (su Copilot il promp
 
 ---
 
-*Documento aggiornato: Ottobre 2026 — Revisione v1.1 — 2026-10-09 — claude-opus-5-5*
+*Documento aggiornato: Ottobre 2026 — Revisione v1.4 — 2026-10-11 — claude-opus-5-5*

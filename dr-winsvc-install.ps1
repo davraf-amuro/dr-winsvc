@@ -14,7 +14,8 @@
         & ([scriptblock]::Create((irm https://raw.githubusercontent.com/davraf-amuro/dr-winsvc/main/dr-winsvc-install.ps1))) -Update
 
     Dipende da dr-dotnet-backend: se assente dal manifest del progetto host,
-    viene installato automaticamente prima di dr-winsvc.
+    viene installato automaticamente prima di dr-winsvc. Lo stesso vale per il core
+    dr-guidelines, dipendenza implicita di ogni pacchetto, che arriva per primo.
 .PARAMETER Update
     Sovrascrive i file gia presenti nel progetto con la versione corrente del pacchetto.
 #>

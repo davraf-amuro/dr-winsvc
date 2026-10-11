@@ -10,7 +10,7 @@ Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. T
 - .NET 10 Worker Service (no ASP.NET Core)
 - `Microsoft.Extensions.Hosting.WindowsServices` (UseWindowsService)
 - `Microsoft.Extensions.Hosting` (BackgroundService / IHostedService)
-- Serilog (stesso setup degli altri progetti)
+- Serilog (stesso setup degli altri progetti) — pacchetto `Serilog.Extensions.Hosting`: su `HostApplicationBuilder` si registra con `builder.Services.AddSerilog(...)`; `UseSerilog` sulla proprietà `Host` esiste solo su `WebApplicationBuilder`: qui non compila
 - Entity Framework Core 10: chiedere prima di aggiungere il pacchetto
 - Aggiungi sempre il file appsettings.local.json, aggiungi la chiamata in Program.cs, e ignora il file in .gitignore
 - Dati sensibili: segui sempre `sensitive-data.instructions.md`
@@ -57,7 +57,7 @@ builder.Services.AddWindowsService(options =>
 builder.Services.Configure<SyncOrdersOptions>(builder.Configuration.GetSection("Workers:SyncOrders"));
 builder.Services.AddHostedService<SyncOrdersWorker>();
 
-builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
+builder.Services.AddSerilog((services, cfg) => cfg.ReadFrom.Configuration(builder.Configuration));
 
 var host = builder.Build();
 host.Run();
@@ -76,7 +76,7 @@ builder.Services.Configure<CleanupOptions>(builder.Configuration.GetSection("Wor
 builder.Services.AddHostedService<SyncOrdersWorker>();
 builder.Services.AddHostedService<CleanupWorker>();
 
-builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
+builder.Services.AddSerilog((services, cfg) => cfg.ReadFrom.Configuration(builder.Configuration));
 
 var host = builder.Build();
 host.Run();
@@ -179,4 +179,4 @@ Prima di iniziare, chiediti:
 
 Se una risposta è NO → chiedi chiarimenti all'utente prima di procedere.
 
-*Template v1.2 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-03-25 — claude-sonnet-4-6
+*Template v1.3 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-11 — claude-opus-5-5 — Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
