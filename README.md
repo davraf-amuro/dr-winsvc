@@ -31,7 +31,7 @@ Punti chiave di `windows-service.instructions.md`:
 - `-Update` non si propaga alle dipendenze: aggiornare solo questo pacchetto lascia `dr-dotnet-backend` com'è. `/dr-get-latest` aggiorna anche la dipendenza, che ha una propria voce nel manifest.
 - La skill `/dr-audit-api` di `dr-dotnet-backend` usa questa istruzione nella fase di conformità quando trova `Workers/*.cs`.
 
-File di altri pacchetti citati dall'istruzione. Non vengono installati in automatico:
+File di altri pacchetti citati dall'istruzione. Il core `dr-guidelines` si installa da solo se manca dal manifest:
 
 | File citato | Pacchetto che lo porta |
 |-------------|------------------------|
@@ -107,4 +107,4 @@ Dal progetto host usa `/dr-segnala-miglioria <descrizione>` (su Copilot il promp
 
 ---
 
-*Documento aggiornato: Ottobre 2026 — Revisione v1.2 — 2026-10-11 — claude-opus-5-5*
+*Documento aggiornato: Ottobre 2026 — Revisione v1.3 — 2026-10-11 — claude-opus-5-5*
