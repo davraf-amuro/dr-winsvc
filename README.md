@@ -24,7 +24,7 @@ Punti chiave di `windows-service.instructions.md`:
 
 ## 🔗 Dipendenze e domini
 
-- Dipende da: `dr-dotnet-backend` (installato in automatico se manca dal manifest: comportamento dell'installer, non ancora provato sul campo).
+- Dipende da: `dr-dotnet-backend` (installato in automatico se manca dal manifest: comportamento dell'installer, non ancora provato sul campo), più il core `dr-guidelines`, dipendenza implicita di ogni pacchetto.
 - Richiesto da: nessun pacchetto.
 - Dominio del catalogo: nessun dominio lo elenca direttamente; il dominio `dotnet-backend` elenca solo `dr-dotnet-backend`. `appliesTo`: `dotnet`.
 - Tipologia che lo suggerisce: `worker-service` — Windows Service / Worker (.NET 10), insieme a `dr-dotnet-backend`; `dr-efdb` è opzionale. Template `dotnet new worker`, guida di scaffolding `docs/scaffolding-windows-service.md` nel core.
@@ -107,4 +107,4 @@ Dal progetto host usa `/dr-segnala-miglioria <descrizione>` (su Copilot il promp
 
 ---
 
-*Documento aggiornato: Ottobre 2026 — Revisione v1.3 — 2026-10-11 — claude-opus-5-5*
+*Documento aggiornato: Ottobre 2026 — Revisione v1.4 — 2026-10-11 — claude-opus-5-5*
