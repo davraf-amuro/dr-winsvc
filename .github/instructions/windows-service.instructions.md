@@ -127,14 +127,24 @@ public class SyncOrdersWorker(ILogger<SyncOrdersWorker> logger, IOptions<SyncOrd
     private async Task DoWorkAsync(CancellationToken ct)
     {
         logger.LogInformation("Executing job {Worker}", nameof(SyncOrdersWorker));
-        var pending = await LoadPendingOrdersAsync(ct);
+        // Lettura degli elementi da elaborare: provider del progetto (es. dr-efdb)
+        IReadOnlyList<Order> pending = [];
 
         foreach (var order in pending)
         {
             // Ogni log dell'elemento, anche dai componenti chiamati, porta S:OrderCode=<codice>
             using var _ = LogSubject.Begin(logger, OrderSubjectField, order.Code);
-            logger.LogInformation("Sync started");
-            // logica business...
+            try
+            {
+                logger.LogInformation("Sync started");
+                // logica business...
+                await Task.CompletedTask;
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                // Dentro lo scope: anche l'errore dell'elemento si isola col filtro del soggetto
+                logger.LogError(ex, "Sync failed");
+            }
         }
     }
 }
@@ -164,8 +174,8 @@ public class SyncOrdersOptions
   },
   "Serilog": {
     "MinimumLevel": { "Default": "Information" }
-    // Using, Override e WriteTo (Console indice 0, File indice 1, template con S:{Subject}):
-    // blocco completo in serilog-logging.instructions.md
+    // OBBLIGATORI, da copiare da serilog-logging.instructions.md: Using, Override e WriteTo
+    // (Console indice 0, File indice 1, template con S:{Subject}). Senza WriteTo nessun log viene scritto
   }
 }
 ```
@@ -203,4 +213,4 @@ Prima di iniziare, chiediti:
 
 Se una risposta è NO → chiedi chiarimenti all'utente prima di procedere.
 
-*Template v1.4 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
+*Template v1.4 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker, errore dell'elemento loggato dentro lo scope. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)

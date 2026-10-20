@@ -36,6 +36,7 @@ File di altri pacchetti citati dall'istruzione. Il core `dr-guidelines` si insta
 | File citato | Chi lo cita | Pacchetto che lo porta |
 |-------------|-------------|------------------------|
 | `sensitive-data.instructions.md`, `code-organization` (Regola 6, commenti) | Istruzione | `dr-guidelines` (core) |
+| `serilog-logging.instructions.md` (fonte unica della configurazione Serilog e del soggetto del log) | Istruzione | `dr-dotnet-backend` |
 
 ## 🚀 Come si installa
 
@@ -112,4 +113,4 @@ Dal progetto host usa `/dr-file-feedback <descrizione>` (su Copilot il prompt `.
 
 ---
 
-*Revisione v1.5 — 2026-10-11 21:00 — claude-opus-5-5*
+*Revisione v1.6 — 2026-10-20 18:25 — claude-opus-5-5*
