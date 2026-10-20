@@ -10,7 +10,7 @@ Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. T
 - .NET 10 Worker Service (no ASP.NET Core)
 - `Microsoft.Extensions.Hosting.WindowsServices` (UseWindowsService)
 - `Microsoft.Extensions.Hosting` (BackgroundService / IHostedService)
-- Serilog (stesso setup degli altri progetti) — pacchetto `Serilog.Extensions.Hosting`: su `HostApplicationBuilder` si registra con `builder.Services.AddSerilog(...)`; `UseSerilog` sulla proprietà `Host` esiste solo su `WebApplicationBuilder`: qui non compila
+- Serilog — fonte unica `serilog-logging.instructions.md` (pacchetto `dr-dotnet-backend`): pacchetti, sezione `Serilog` di `appsettings.json`, enricher, soggetto del log. Su `HostApplicationBuilder` si registra con `builder.Services.AddSerilog(...)`; `UseSerilog` sulla proprietà `Host` esiste solo su `WebApplicationBuilder`: qui non compila
 - Entity Framework Core 10: chiedere prima di aggiungere il pacchetto
 - Aggiungi sempre il file appsettings.local.json, aggiungi la chiamata in Program.cs, e ignora il file in .gitignore
 - Dati sensibili: segui sempre `sensitive-data.instructions.md`
@@ -57,7 +57,12 @@ builder.Services.AddWindowsService(options =>
 builder.Services.Configure<SyncOrdersOptions>(builder.Configuration.GetSection("Workers:SyncOrders"));
 builder.Services.AddHostedService<SyncOrdersWorker>();
 
-builder.Services.AddSerilog((services, cfg) => cfg.ReadFrom.Configuration(builder.Configuration));
+builder.Services.AddSerilog((_, lc) => lc
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithThreadId()
+    .Enrich.With<TaskIdEnricher>()
+    .Enrich.With<SubjectDefaultEnricher>());
 
 var host = builder.Build();
 host.Run();
@@ -76,7 +81,12 @@ builder.Services.Configure<CleanupOptions>(builder.Configuration.GetSection("Wor
 builder.Services.AddHostedService<SyncOrdersWorker>();
 builder.Services.AddHostedService<CleanupWorker>();
 
-builder.Services.AddSerilog((services, cfg) => cfg.ReadFrom.Configuration(builder.Configuration));
+builder.Services.AddSerilog((_, lc) => lc
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithThreadId()
+    .Enrich.With<TaskIdEnricher>()
+    .Enrich.With<SubjectDefaultEnricher>());
 
 var host = builder.Build();
 host.Run();
@@ -111,11 +121,21 @@ public class SyncOrdersWorker(ILogger<SyncOrdersWorker> logger, IOptions<SyncOrd
         logger.LogInformation("Worker {Worker} stopped", nameof(SyncOrdersWorker));
     }
 
+    // Campo scelto dall'utente come soggetto del log (serilog-logging.instructions.md)
+    private const string OrderSubjectField = "OrderCode";
+
     private async Task DoWorkAsync(CancellationToken ct)
     {
         logger.LogInformation("Executing job {Worker}", nameof(SyncOrdersWorker));
-        // logica business...
-        await Task.CompletedTask;
+        var pending = await LoadPendingOrdersAsync(ct);
+
+        foreach (var order in pending)
+        {
+            // Ogni log dell'elemento, anche dai componenti chiamati, porta S:OrderCode=<codice>
+            using var _ = LogSubject.Begin(logger, OrderSubjectField, order.Code);
+            logger.LogInformation("Sync started");
+            // logica business...
+        }
     }
 }
 ```
@@ -143,7 +163,9 @@ public class SyncOrdersOptions
     }
   },
   "Serilog": {
-    "MinimumLevel": "Information"
+    "MinimumLevel": { "Default": "Information" }
+    // Using, Override e WriteTo (Console indice 0, File indice 1, template con S:{Subject}):
+    // blocco completo in serilog-logging.instructions.md
   }
 }
 ```
@@ -167,6 +189,8 @@ public class SyncOrdersOptions
 - [ ] `appsettings.json` con sezione `Workers:<NomeJob>` per ogni worker
 - [ ] Commenti `///` su ogni worker e metodo non banale + inline su operazioni rilevanti (code-organization Regola 6)
 - [ ] Logging strutturato con placeholder, nessuna string interpolation
+- [ ] Serilog conforme a `serilog-logging.instructions.md`: sezione `Serilog` completa in `appsettings.json`, enricher in `Program.cs`
+- [ ] Soggetto del log indicato dall'utente: `LogSubject.Begin` per ogni elemento elaborato
 - [ ] `appsettings.local.json` aggiunto e ignorato in `.gitignore`
 - [ ] `appsettings.json` contiene solo valori fake/placeholder per dati sensibili, mai credenziali reali
 
@@ -179,4 +203,4 @@ Prima di iniziare, chiediti:
 
 Se una risposta è NO → chiedi chiarimenti all'utente prima di procedere.
 
-*Template v1.3 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-11 — claude-opus-5-5 — Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
+*Template v1.4 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
