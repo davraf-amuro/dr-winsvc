@@ -81,7 +81,7 @@ Ogni worker estende `[BaseClass]` e opera in loop periodico con intervallo confi
 - **Deploy:** Windows Service (`sc create` / `sc start`)
 - **Ambiente Test:** [percorso fisico | nome server | servizio Windows su ... | non pubblicato]
 - **Ambiente Produzione:** [percorso fisico | nome server | servizio Windows su ... | non pubblicato]
-- **Logging:** [struttura file log per worker, rolling giornaliero]
+- **Logging:** [Serilog come da `serilog-logging.instructions.md`: Console + file unico `logs/app-.log` con rolling giornaliero, non un file per worker; indica il percorso effettivo se diverso]
 
 ## Configurazione Worker
 
@@ -119,4 +119,4 @@ Ogni worker ha una sezione dedicata in `appsettings.json` sotto `Workers`:
 - [ ] Ambiente Test compilato (o `non pubblicato`)
 - [ ] Ambiente Produzione compilato (o `non pubblicato`)
 
-*Template v1.2 - .NET 10 Worker Service - Token-optimized for AI agents* - Last Update 2026-10-11 — claude-opus-5-5 — pattern e campi Options ricavati dal codice, allineati a windows-service.instructions.md (davraf-amuro/dr-winsvc#1)
+*Template v1.3 - .NET 10 Worker Service - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — riga Logging allineata a `serilog-logging.instructions.md` (file unico, non per worker). v1.2: pattern e campi Options ricavati dal codice, allineati a windows-service.instructions.md (davraf-amuro/dr-winsvc#1)

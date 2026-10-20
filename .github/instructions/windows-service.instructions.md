@@ -26,6 +26,7 @@ Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. T
 - src/<project>/
   - Workers/
   - Infrastructure/Provider/{Entities,Filters,*DbContext.cs,*Provider.cs}
+  - Infrastructure/Logging/ (richiesta da `serilog-logging.instructions.md`)
   - Properties/
   - Program.cs
 - test/
@@ -44,6 +45,7 @@ Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. T
 10) Graceful shutdown: `ExecuteAsync` con try/catch su `OperationCanceledException`
 11) Multi-worker: ogni job ha `IOptions<T>` dedicato con `IntervalSeconds`, registrati separatamente
 12) Configurazione strongly-typed per worker in `appsettings.json` sezione `Workers:<NomeJob>`
+13) Elementi indipendenti nello stesso ciclo (`concurrency.instructions.md` del core): preferisci l'esecuzione parallela con limite da configurazione (`fan-out-parallelism.instructions.md` o `producer-consumer-queue.instructions.md` di `dr-dotnet-backend`); se resti in serie, scrivi nel codice `// Resto in serie: <motivo>`
 
 ## Pattern richiesti (copiabili)
 
@@ -57,12 +59,7 @@ builder.Services.AddWindowsService(options =>
 builder.Services.Configure<SyncOrdersOptions>(builder.Configuration.GetSection("Workers:SyncOrders"));
 builder.Services.AddHostedService<SyncOrdersWorker>();
 
-builder.Services.AddSerilog((_, lc) => lc
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithThreadId()
-    .Enrich.With<TaskIdEnricher>()
-    .Enrich.With<SubjectDefaultEnricher>());
+// Serilog: registrazione con AddSerilog su IServiceCollection, come in serilog-logging.instructions.md ("Program.cs — registrazione")
 
 var host = builder.Build();
 host.Run();
@@ -81,12 +78,7 @@ builder.Services.Configure<CleanupOptions>(builder.Configuration.GetSection("Wor
 builder.Services.AddHostedService<SyncOrdersWorker>();
 builder.Services.AddHostedService<CleanupWorker>();
 
-builder.Services.AddSerilog((_, lc) => lc
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithThreadId()
-    .Enrich.With<TaskIdEnricher>()
-    .Enrich.With<SubjectDefaultEnricher>());
+// Serilog: registrazione con AddSerilog su IServiceCollection, come in serilog-logging.instructions.md ("Program.cs — registrazione")
 
 var host = builder.Build();
 host.Run();
@@ -130,6 +122,7 @@ public class SyncOrdersWorker(ILogger<SyncOrdersWorker> logger, IOptions<SyncOrd
         // Lettura degli elementi da elaborare: provider del progetto (es. dr-efdb)
         IReadOnlyList<Order> pending = [];
 
+        // Resto in serie: un ordine alla volta perché <motivo: ordine di elaborazione, DbContext condiviso, rate limit del servizio>
         foreach (var order in pending)
         {
             // Ogni log dell'elemento, anche dai componenti chiamati, porta S:OrderCode=<codice>
@@ -171,33 +164,10 @@ public class SyncOrdersOptions
     "Cleanup": {
       "IntervalSeconds": 3600
     }
-  },
-  "Serilog": {
-    // Fonte unica: serilog-logging.instructions.md. Console indice 0, File indice 1 (override per ambiente)
-    "Using": [ "Serilog.Sinks.Console", "Serilog.Sinks.File" ],
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": { "Microsoft.EntityFrameworkCore": "Warning" }
-    },
-    "WriteTo": [
-      {
-        "Name": "Console",
-        "Args": {
-          "outputTemplate": "{Timestamp:HH:mm:ss} [{Level:u3}] T:{ThreadId} A:{TaskId} S:{Subject} {Message:lj}{NewLine}{Exception}"
-        }
-      },
-      {
-        "Name": "File",
-        "Args": {
-          "path": "logs/app-.log",
-          "rollingInterval": "Day",
-          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] T:{ThreadId} A:{TaskId} S:{Subject} {Message:lj}{NewLine}{Exception}"
-        }
-      }
-    ]
   }
 }
 ```
+La sezione `Serilog` di `appsettings.json` non si ricopia qui: copiala da `serilog-logging.instructions.md` (fonte unica). Differenza del worker: l'override `Microsoft.AspNetCore` non serve (niente ASP.NET Core); resta `Microsoft.EntityFrameworkCore` se il worker usa EF. Il file di log è uno solo (`logs/app-.log`), non uno per worker: i worker si distinguono dal nome riportato nei messaggi (`{Worker}`).
 
 ## Errori comuni (rapidi)
 - `Thread.Sleep` => blocca shutdown SCM, usare `Task.Delay` con `stoppingToken`
@@ -232,4 +202,4 @@ Prima di iniziare, chiediti:
 
 Se una risposta è NO → chiedi chiarimenti all'utente prima di procedere.
 
-*Template v1.4 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker, errore dell'elemento loggato dentro lo scope. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
+*Template v1.5 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — audit suite: registrazione Serilog e sezione `appsettings` non più ricopiate (rimando alla fonte unica), `Infrastructure/Logging/` nella struttura, regola 13 sulla dichiarazione "Resto in serie". v1.4: Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker, errore dell'elemento loggato dentro lo scope. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
