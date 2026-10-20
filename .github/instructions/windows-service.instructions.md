@@ -173,9 +173,28 @@ public class SyncOrdersOptions
     }
   },
   "Serilog": {
-    "MinimumLevel": { "Default": "Information" }
-    // OBBLIGATORI, da copiare da serilog-logging.instructions.md: Using, Override e WriteTo
-    // (Console indice 0, File indice 1, template con S:{Subject}). Senza WriteTo nessun log viene scritto
+    // Fonte unica: serilog-logging.instructions.md. Console indice 0, File indice 1 (override per ambiente)
+    "Using": [ "Serilog.Sinks.Console", "Serilog.Sinks.File" ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": { "Microsoft.EntityFrameworkCore": "Warning" }
+    },
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "outputTemplate": "{Timestamp:HH:mm:ss} [{Level:u3}] T:{ThreadId} A:{TaskId} S:{Subject} {Message:lj}{NewLine}{Exception}"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/app-.log",
+          "rollingInterval": "Day",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] T:{ThreadId} A:{TaskId} S:{Subject} {Message:lj}{NewLine}{Exception}"
+        }
+      }
+    ]
   }
 }
 ```
