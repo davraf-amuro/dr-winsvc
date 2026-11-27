@@ -38,7 +38,7 @@ Opera in background con [N] worker autonomi e ciclici: `[Worker1]`, `[Worker2]`,
 - **Contatto Supporto:** [email-supporto]
 
 ## Stack Tecnologico
-- **Linguaggio Principale:** C# 14
+- **Linguaggio Principale:** C# 15
 - **Framework:** .NET 11 Worker Service
 - **Target Framework:** net11.0
 - **SDK Version:** Microsoft.NET.Sdk.Worker
@@ -119,4 +119,4 @@ Ogni worker ha una sezione dedicata in `appsettings.json` sotto `Workers`:
 - [ ] Ambiente Test compilato (o `non pubblicato`)
 - [ ] Ambiente Produzione compilato (o `non pubblicato`)
 
-*Template v1.4 - .NET 11 Worker Service - Token-optimized for AI agents* - Last Update 2026-11-27 — claude-sonnet-5-5 — .NET 11 come versione consigliata (davraf-amuro/dr-guidelines#37). v1.3 (2026-10-20, claude-opus-5-5): riga Logging allineata a `serilog-logging.instructions.md` (file unico, non per worker). v1.2: pattern e campi Options ricavati dal codice, allineati a windows-service.instructions.md (davraf-amuro/dr-winsvc#1)
+*Template v1.5 - .NET 11 Worker Service - Token-optimized for AI agents* - Last Update 2026-11-27 — claude-sonnet-5-5 — linguaggio C# 15, default del compilatore su net11.0 (davraf-amuro/dr-guidelines#37). v1.4: .NET 11 come versione consigliata. v1.3 (2026-10-20, claude-opus-5-5): riga Logging allineata a `serilog-logging.instructions.md` (file unico, non per worker). v1.2: pattern e campi Options ricavati dal codice, allineati a windows-service.instructions.md (davraf-amuro/dr-winsvc#1)
