@@ -27,7 +27,7 @@ Punti chiave di `windows-service.instructions.md`:
 - Dipende da: `dr-dotnet-backend` (installato in automatico se manca dal manifest), più il core `dr-guidelines`, dipendenza implicita di ogni pacchetto.
 - Richiesto da: nessun pacchetto.
 - Dominio del catalogo: nessun dominio lo elenca direttamente; il dominio `dotnet-backend` elenca solo `dr-dotnet-backend`. `appliesTo`: `dotnet`.
-- Tipologia che lo suggerisce: `worker-service` — Windows Service / Worker (.NET 11), insieme a `dr-dotnet-backend`; `dr-efdb` e `dr-devops` sono opzionali. Template `dotnet new worker`, guida di scaffolding `docs/scaffolding-windows-service.md` nel core.
+- Tipologia che lo suggerisce: `worker-service` — Windows Service / Worker (.NET), insieme a `dr-dotnet-backend`; `dr-efdb` e `dr-devops` sono opzionali. Template `dotnet new worker`, guida di scaffolding `docs/scaffolding-windows-service.md` nel core.
 - `-Update` non si propaga alle dipendenze: aggiornare solo questo pacchetto lascia `dr-dotnet-backend` com'è. `/dr-get-latest` aggiorna anche la dipendenza, che ha una propria voce nel manifest.
 - La skill `/dr-audit-api` di `dr-dotnet-backend` usa questa istruzione nella fase di conformità quando trova `Workers/*.cs`.
 
@@ -113,4 +113,4 @@ Dal progetto host usa `/dr-file-feedback <descrizione>` (su Copilot il prompt `.
 
 ---
 
-*Revisione v1.8 — 2026-11-27 15:23 — claude-sonnet-5-5*
+*Revisione v1.9 — 2026-11-27 18:40 — claude-opus-5-5*
