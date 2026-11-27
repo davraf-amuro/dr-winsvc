@@ -113,4 +113,4 @@ Dal progetto host usa `/dr-file-feedback <descrizione>` (su Copilot il prompt `.
 
 ---
 
-*Revisione v1.9 — 2026-11-27 18:40 — claude-opus-5-5*
+*Revisione v1.9 — 2026-11-27 15:49 — claude-opus-5-5*
