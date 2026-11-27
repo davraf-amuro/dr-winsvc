@@ -22,6 +22,18 @@ Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. T
 - ASP.NET Core Minimal API / MVC Controllers
 - IRepository pattern, AutoMapper, MediatR
 
+## Gate preliminare (obbligatorio)
+Prima di creare un servizio nuovo o un worker, raccogli in **un solo messaggio** le risposte mancanti; nessun file finché non sono tutte date:
+
+| # | Domanda | Default proposto |
+|---|---------|------------------|
+| 1 | Nome del progetto | `<nomecartella>.service` in lowercase (suffisso del catalogo `scaffolding-catalog.json`) |
+| 2 | Nome dei worker da creare | Es. `SyncOrders`, `Cleanup` |
+| 3 | `IntervalSeconds` per ogni worker | Nessuno: chiedi se non specificato |
+| 4 | Entity Framework Core necessario? | Nessuno: chiedi prima di aggiungere il pacchetto |
+
+Risposta già nella richiesta dell'utente → non ripetere la domanda. Aggiunta di un worker a un servizio esistente → valgono solo le domande 2-4.
+
 ## Struttura progetto
 - src/<project>/
   - Workers/
@@ -202,4 +214,4 @@ Prima di iniziare, chiediti:
 
 Se una risposta è NO → chiedi chiarimenti all'utente prima di procedere.
 
-*Template v1.5 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — audit suite: registrazione Serilog e sezione `appsettings` non più ricopiate (rimando alla fonte unica), `Infrastructure/Logging/` nella struttura, regola 13 sulla dichiarazione "Resto in serie". v1.4: Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker, errore dell'elemento loggato dentro lo scope. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
+*Template v1.6 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-29 — claude-opus-5-5 — v1.6: sezione "Gate preliminare (obbligatorio)", domande 1-4 dello scaffolding formalizzate. v1.5: audit suite: registrazione Serilog e sezione `appsettings` non più ricopiate (rimando alla fonte unica), `Infrastructure/Logging/` nella struttura, regola 13 sulla dichiarazione "Resto in serie". v1.4: Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker, errore dell'elemento loggato dentro lo scope. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
