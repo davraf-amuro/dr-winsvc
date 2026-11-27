@@ -4,14 +4,14 @@ applyTo: "**"
 
 # Windows Service Design Rules (AI Agent)
 
-Scopo: regole obbligatorie per progetti Windows Service .NET 10. Segui sempre. Testo ottimizzato per token.
+Scopo: regole obbligatorie per progetti Windows Service .NET 11. Segui sempre. Testo ottimizzato per token.
 
 ## Stack (obbligatorio)
-- .NET 10 Worker Service (no ASP.NET Core)
+- .NET 11 (`net11.0`, la versione indicata da `defaults.dotnetFramework` nel catalogo del core) Worker Service (no ASP.NET Core)
 - `Microsoft.Extensions.Hosting.WindowsServices` (UseWindowsService)
 - `Microsoft.Extensions.Hosting` (BackgroundService / IHostedService)
 - Serilog — fonte unica `serilog-logging.instructions.md` (pacchetto `dr-dotnet-backend`): pacchetti, sezione `Serilog` di `appsettings.json`, enricher, soggetto del log. Su `HostApplicationBuilder` si registra con `builder.Services.AddSerilog(...)`; `UseSerilog` sulla proprietà `Host` esiste solo su `WebApplicationBuilder`: qui non compila
-- Entity Framework Core 10: chiedere prima di aggiungere il pacchetto
+- Entity Framework Core 11: chiedere prima di aggiungere il pacchetto
 - Aggiungi sempre il file appsettings.local.json, aggiungi la chiamata in Program.cs, e ignora il file in .gitignore
 - Dati sensibili: segui sempre `sensitive-data.instructions.md`
 
@@ -214,4 +214,4 @@ Prima di iniziare, chiediti:
 
 Se una risposta è NO → chiedi chiarimenti all'utente prima di procedere.
 
-*Template v1.6 - .NET 10 - Token-optimized for AI agents* - Last Update 2026-10-29 — claude-opus-5-5 — v1.6: sezione "Gate preliminare (obbligatorio)", domande 1-4 dello scaffolding formalizzate. v1.5: audit suite: registrazione Serilog e sezione `appsettings` non più ricopiate (rimando alla fonte unica), `Infrastructure/Logging/` nella struttura, regola 13 sulla dichiarazione "Resto in serie". v1.4: Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker, errore dell'elemento loggato dentro lo scope. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)
+*Template v1.7 - .NET 11 - Token-optimized for AI agents* - Last Update 2026-11-27 — claude-sonnet-5-5 — .NET 11 come versione consigliata (davraf-amuro/dr-guidelines#37). v1.6 (2026-10-29, claude-opus-5-5): v1.6: sezione "Gate preliminare (obbligatorio)", domande 1-4 dello scaffolding formalizzate. v1.5: audit suite: registrazione Serilog e sezione `appsettings` non più ricopiate (rimando alla fonte unica), `Infrastructure/Logging/` nella struttura, regola 13 sulla dichiarazione "Resto in serie". v1.4: Serilog: enricher in `Program.cs` e fonte unica `serilog-logging.instructions.md` (`dr-dotnet-backend`); soggetto del log nel worker, errore dell'elemento loggato dentro lo scope. v1.3: Serilog registrato con `builder.Services.AddSerilog` (davraf-amuro/dr-winsvc#1)

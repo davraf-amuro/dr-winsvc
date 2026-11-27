@@ -1,19 +1,19 @@
 # dr-winsvc
 
-Pacchetto di linee guida dr-* per i progetti Windows Service e Worker Service su .NET 10, con uno o più worker in background.
+Pacchetto di linee guida dr-* per i progetti Windows Service e Worker Service su .NET 11, con uno o più worker in background.
 
 ## 🧩 Cosa contiene
 
 | File | Tipo | A cosa serve |
 |------|------|--------------|
-| `.github/instructions/windows-service.instructions.md` | Istruzione | Regole obbligatorie per i Windows Service .NET 10: un file per worker in `Workers/<Name>Worker.cs` che eredita `BackgroundService`, `AddWindowsService` in `Program.cs`, configurazione `IOptions<T>` dedicata per ogni worker. Vieta `Thread.Sleep`, loop senza controllo di `stoppingToken`, eccezioni non gestite in `ExecuteAsync`, ASP.NET Core, IRepository, AutoMapper e MediatR. |
+| `.github/instructions/windows-service.instructions.md` | Istruzione | Regole obbligatorie per i Windows Service .NET 11: un file per worker in `Workers/<Name>Worker.cs` che eredita `BackgroundService`, `AddWindowsService` in `Program.cs`, configurazione `IOptions<T>` dedicata per ogni worker. Vieta `Thread.Sleep`, loop senza controllo di `stoppingToken`, eccezioni non gestite in `ExecuteAsync`, ASP.NET Core, IRepository, AutoMapper e MediatR. |
 | `.github/prompts/card-worker-service.prompt.md` | Prompt | Genera o aggiorna `docs/card-<nome_progetto>.md`, la scheda riassuntiva del servizio: worker e ciclo di elaborazione, dipendenze, database, servizi esterni, hosting, configurazione dei worker. Ricava i dati da `.csproj`, `appsettings*.json`, `Program.cs`, `Workers/` e `Workers/Options/`, senza inventare e senza scrivere valori sensibili. |
 
 Punti chiave di `windows-service.instructions.md`:
 
 | Tema | Cosa impone |
 |------|-------------|
-| Stack | .NET 10 Worker Service senza ASP.NET Core, `Microsoft.Extensions.Hosting.WindowsServices`, `Microsoft.Extensions.Hosting`, Serilog. EF Core 10 solo dopo averlo chiesto. |
+| Stack | .NET 11 Worker Service senza ASP.NET Core, `Microsoft.Extensions.Hosting.WindowsServices`, `Microsoft.Extensions.Hosting`, Serilog. EF Core 11 solo dopo averlo chiesto. |
 | Struttura | `src/<project>/` con `Workers/`, `Infrastructure/Provider/`, `Properties/`, `Program.cs`; poi `test/` e `docs/`. |
 | `Program.cs` | `Host.CreateApplicationBuilder`, `AddWindowsService` con `ServiceName` letto da `Service:Name`, un `AddHostedService<T>` per ogni worker. |
 | Ciclo del worker | `while (!stoppingToken.IsCancellationRequested)` con attesa `await Task.Delay(TimeSpan.FromSeconds(IntervalSeconds), stoppingToken)`. |
@@ -27,7 +27,7 @@ Punti chiave di `windows-service.instructions.md`:
 - Dipende da: `dr-dotnet-backend` (installato in automatico se manca dal manifest), più il core `dr-guidelines`, dipendenza implicita di ogni pacchetto.
 - Richiesto da: nessun pacchetto.
 - Dominio del catalogo: nessun dominio lo elenca direttamente; il dominio `dotnet-backend` elenca solo `dr-dotnet-backend`. `appliesTo`: `dotnet`.
-- Tipologia che lo suggerisce: `worker-service` — Windows Service / Worker (.NET 10), insieme a `dr-dotnet-backend`; `dr-efdb` e `dr-devops` sono opzionali. Template `dotnet new worker`, guida di scaffolding `docs/scaffolding-windows-service.md` nel core.
+- Tipologia che lo suggerisce: `worker-service` — Windows Service / Worker (.NET 11), insieme a `dr-dotnet-backend`; `dr-efdb` e `dr-devops` sono opzionali. Template `dotnet new worker`, guida di scaffolding `docs/scaffolding-windows-service.md` nel core.
 - `-Update` non si propaga alle dipendenze: aggiornare solo questo pacchetto lascia `dr-dotnet-backend` com'è. `/dr-get-latest` aggiorna anche la dipendenza, che ha una propria voce nel manifest.
 - La skill `/dr-audit-api` di `dr-dotnet-backend` usa questa istruzione nella fase di conformità quando trova `Workers/*.cs`.
 
@@ -113,4 +113,4 @@ Dal progetto host usa `/dr-file-feedback <descrizione>` (su Copilot il prompt `.
 
 ---
 
-*Revisione v1.7 — 2026-10-20 21:00 — claude-opus-5-5*
+*Revisione v1.8 — 2026-11-27 15:23 — claude-sonnet-5-5*

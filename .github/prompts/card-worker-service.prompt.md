@@ -1,6 +1,6 @@
 ---
 agent: 'agent'
-description: 'Genera la scheda riassuntiva per progetti Windows Service .NET 10'
+description: 'Genera la scheda riassuntiva per progetti Windows Service .NET 11'
 tools: ['search/codebase']
 ---
 
@@ -39,8 +39,8 @@ Opera in background con [N] worker autonomi e ciclici: `[Worker1]`, `[Worker2]`,
 
 ## Stack Tecnologico
 - **Linguaggio Principale:** C# 14
-- **Framework:** .NET 10 Worker Service
-- **Target Framework:** net10.0
+- **Framework:** .NET 11 Worker Service
+- **Target Framework:** net11.0
 - **SDK Version:** Microsoft.NET.Sdk.Worker
 
 ## Architettura Worker
@@ -69,7 +69,7 @@ Ogni worker estende `[BaseClass]` e opera in loop periodico con intervallo confi
 ## Database
 | Connection String Key | Nome Database | Tipo | Server/Host | Username | Provider/ORM |
 |-----------------------|---------------|------|-------------|----------|--------------|
-| ... | ... | ... | da `appsettings.local.json` | da `appsettings.local.json` | EF Core 10 |
+| ... | ... | ... | da `appsettings.local.json` | da `appsettings.local.json` | EF Core 11 |
 
 ## Servizi Esterni
 | Tipo | Nome/Endpoint | Protocollo | Autenticazione | Scopo/Descrizione |
@@ -119,4 +119,4 @@ Ogni worker ha una sezione dedicata in `appsettings.json` sotto `Workers`:
 - [ ] Ambiente Test compilato (o `non pubblicato`)
 - [ ] Ambiente Produzione compilato (o `non pubblicato`)
 
-*Template v1.3 - .NET 10 Worker Service - Token-optimized for AI agents* - Last Update 2026-10-20 — claude-opus-5-5 — riga Logging allineata a `serilog-logging.instructions.md` (file unico, non per worker). v1.2: pattern e campi Options ricavati dal codice, allineati a windows-service.instructions.md (davraf-amuro/dr-winsvc#1)
+*Template v1.4 - .NET 11 Worker Service - Token-optimized for AI agents* - Last Update 2026-11-27 — claude-sonnet-5-5 — .NET 11 come versione consigliata (davraf-amuro/dr-guidelines#37). v1.3 (2026-10-20, claude-opus-5-5): riga Logging allineata a `serilog-logging.instructions.md` (file unico, non per worker). v1.2: pattern e campi Options ricavati dal codice, allineati a windows-service.instructions.md (davraf-amuro/dr-winsvc#1)
